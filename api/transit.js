@@ -1,4 +1,6 @@
 export default async function handler(req, res) {
+  res.setHeader('Cache-Control', 'no-store')
+
   const { sx, sy, ex, ey } = req.query
 
   if (!sx || !sy || !ex || !ey) {
