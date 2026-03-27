@@ -3,7 +3,7 @@ import { Badge } from './ui/badge'
 import { cn } from '@/lib/utils'
 
 export default function RouteCard({ result, destPlace, isBest, index }) {
-  const { route, nextShuttle, wait, shuttleDur, transitDur, total } = result
+  const { route, stop, nextShuttle, wait, shuttleDur, transitDur, total } = result
   const depTime = nextShuttle
   const arrTime = addMin(depTime, shuttleDur)
   const totalStr = total !== null ? fmtDur(total) : '?'
@@ -11,7 +11,7 @@ export default function RouteCard({ result, destPlace, isBest, index }) {
 
   const naverHref =
     `https://map.naver.com/v5/directions/` +
-    `${route.finalCoord.x},${route.finalCoord.y},${encodeURIComponent(route.finalStop)}/` +
+    `${stop.coord.x},${stop.coord.y},${encodeURIComponent(stop.name)}/` +
     `${destPlace.x},${destPlace.y},${encodeURIComponent(destPlace.name)}/-/transit`
 
   return (
@@ -31,7 +31,7 @@ export default function RouteCard({ result, destPlace, isBest, index }) {
             <span className="text-[13px] font-bold text-slate-900">{route.name}</span>
             {isBest && <Badge variant="default" className="text-[9px] tracking-wide">⚡ 최적</Badge>}
           </div>
-          <p className="text-[11px] text-slate-400 mt-0.5">{route.fee.toLocaleString()}원 · {route.finalStop} 하차</p>
+          <p className="text-[11px] text-slate-400 mt-0.5">{route.fee.toLocaleString()}원 · {stop.name} 하차</p>
         </div>
         <div className="text-right shrink-0">
           <div className="font-mono text-[22px] font-medium text-slate-900 leading-none">{totalStr}</div>
@@ -62,8 +62,8 @@ export default function RouteCard({ result, destPlace, isBest, index }) {
           </div>
           <div className="flex-1 pb-2.5">
             <div className="font-mono text-xs text-blue-500 font-medium leading-none mb-0.5">~{arrTime} 도착</div>
-            <div className="text-[13px] font-semibold text-slate-800">{route.finalStop}</div>
-            <div className="text-[11px] text-slate-400 mt-0.5 leading-snug">{route.stops.join(' → ')}</div>
+            <div className="text-[13px] font-semibold text-slate-800">{stop.name}</div>
+            <div className="text-[11px] text-slate-400 mt-0.5 leading-snug">{route.stops.map(s => s.name).join(' → ')}</div>
             <Badge variant="outline" className="mt-1 text-[10px]">{route.transfer}</Badge>
           </div>
         </div>
@@ -100,7 +100,7 @@ export default function RouteCard({ result, destPlace, isBest, index }) {
           rel="noopener noreferrer"
           className="flex items-center justify-center gap-1.5 w-full bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-700 text-xs font-semibold font-sans py-2.5 mt-2.5 hover:bg-emerald-100 transition-colors"
         >
-          🗺 네이버지도에서 {route.finalStop} → {destPlace.name} 열기
+          🗺 네이버지도에서 {stop.name} → {destPlace.name} 열기
         </a>
       </div>
     </div>

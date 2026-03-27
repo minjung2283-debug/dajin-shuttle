@@ -28,30 +28,41 @@ export default function App() {
     const isFri = day === '금'
     const nowMin = toMin(time)
 
-    const candidates = ROUTES.map(route => {
+    // Generate one candidate per (route × stop)
+    const perStop = ROUTES.flatMap(route => {
       const list = isFri ? route.schedules.fri : route.schedules.weekday
       const next = list.find(t => toMin(t) >= nowMin) || null
-      return { route, nextShuttle: next }
-    }).filter(c => c.nextShuttle)
+      if (!next) return []
+      return route.stops.map(stop => ({ route, nextShuttle: next, stop }))
+    })
 
-    if (!candidates.length) { setResults([]); return }
+    if (!perStop.length) { setResults([]); return }
 
     setLoading(true)
     setResults(null)
 
     const transitResults = await Promise.all(
-      candidates.map(c => fetchOdsayTransit(c.route.finalCoord, destPlace))
+      perStop.map(c => fetchOdsayTransit(c.stop.coord, destPlace))
     )
 
     setLoading(false)
 
-    const computed = candidates.map((c, i) => {
+    // Compute totals and keep best stop per route
+    const byRoute = new Map()
+    perStop.forEach((c, i) => {
       const wait = toMin(c.nextShuttle) - nowMin
-      const shuttleDur = c.route.durationMin
+      const shuttleDur = c.stop.minsFromDep
       const transitDur = transitResults[i]
       const total = transitDur !== null ? wait + shuttleDur + transitDur : null
-      return { ...c, wait, shuttleDur, transitDur, total }
-    }).sort((a, b) => {
+      const entry = { ...c, wait, shuttleDur, transitDur, total }
+      const prev = byRoute.get(c.route.id)
+      if (!prev) { byRoute.set(c.route.id, entry); return }
+      const better =
+        total !== null && (prev.total === null || total < prev.total)
+      if (better) byRoute.set(c.route.id, entry)
+    })
+
+    const computed = [...byRoute.values()].sort((a, b) => {
       if (a.total === null) return 1
       if (b.total === null) return -1
       return a.total - b.total
