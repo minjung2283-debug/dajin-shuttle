@@ -40,7 +40,7 @@ export default function SearchPanel({ kakaoKey, day, time, onDayChange, onTimeCh
 
           {/* 시각 입력 */}
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1.5">학교를 떠날 수 있는 시각</label>
+            <label className="block text-[11px] text-slate-400 mb-1.5">출발 시각</label>
             <input
               type="time"
               value={time}
@@ -52,7 +52,7 @@ export default function SearchPanel({ kakaoKey, day, time, onDayChange, onTimeCh
       </Card>
 
       <Button className="w-full h-12 text-[15px] mb-1" onClick={onSearch}>
-        🔍 최적 경로 찾기
+        최적 경로 찾기
       </Button>
     </>
   )
