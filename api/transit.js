@@ -20,6 +20,7 @@ export default async function handler(req, res) {
 
     const response = await fetch(url)
     const data = await response.json()
+    console.log('ODsay response:', JSON.stringify(data).slice(0, 300))
 
     if (data.result?.path?.length > 0) {
       const best = data.result.path.reduce((a, b) =>
