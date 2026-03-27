@@ -13,12 +13,12 @@ export default async function handler(req, res) {
   }
 
   try {
-    const url =
-      `https://api.odsay.com/v1/api/searchPubTransPathT` +
-      `?SX=${sx}&SY=${sy}&EX=${ex}&EY=${ey}` +
-      `&apiKey=${encodeURIComponent(odsayKey)}`
+    const params = new URLSearchParams({ SX: sx, SY: sy, EX: ex, EY: ey, apiKey: odsayKey })
+    const url = `https://api.odsay.com/v1/api/searchPubTransPathT?${params}`
 
-    const response = await fetch(url)
+    const response = await fetch(url, {
+      headers: { Referer: 'https://dajin-shuttle.vercel.app' },
+    })
     const data = await response.json()
 
     if (data.result?.path?.length > 0) {
