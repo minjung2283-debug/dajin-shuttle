@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   const { sx, sy, ex, ey } = req.query
 
   if (!sx || !sy || !ex || !ey) {
-    return res.status(400).json({ error: 'Missing coordinates' })
+    return res.status(400).json({ error: 'Missing coordinates', query: req.query })
   }
 
   const odsayKey = process.env.VITE_ODSAY_KEY
@@ -20,7 +20,6 @@ export default async function handler(req, res) {
 
     const response = await fetch(url)
     const data = await response.json()
-    console.log('ODsay response:', JSON.stringify(data).slice(0, 300))
 
     if (data.result?.path?.length > 0) {
       const best = data.result.path.reduce((a, b) =>
@@ -29,7 +28,8 @@ export default async function handler(req, res) {
       return res.status(200).json({ totalTime: best.info.totalTime })
     }
 
-    return res.status(200).json({ totalTime: null })
+    // 디버그: ODsay 원본 응답 포함해서 반환
+    return res.status(200).json({ totalTime: null, _debug: data })
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
