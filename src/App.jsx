@@ -64,14 +64,10 @@ export default function App() {
     <div className="max-w-[440px] mx-auto px-4 pb-20 min-h-screen bg-slate-50">
       {/* Header */}
       <header className="pt-10 pb-7 text-center">
-        <p className="font-mono text-[10px] tracking-[3px] text-blue-500 uppercase mb-3 opacity-80">
+        <p className="mt-2 text-[11px] text-slate-400 font-soli mb-3">PL lab</p>
+        <p className="font-mono text-[12px] tracking-[3px] text-blue-500 uppercase mb-3 opacity-80">
           Daejin Univ · Shuttle Finder
         </p>
-        <p className="mt-2 text-xs text-slate-400 font-light">PL lab</p>
-        <h1 className="text-[26px] font-black tracking-tight leading-tight text-slate-900">
-          셔틀 타면<br />
-          <em className="not-italic text-blue-500">더 빠릅니다</em>
-        </h1>
       </header>
 
       {!import.meta.env.VITE_KAKAO_KEY && (
