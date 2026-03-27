@@ -13,23 +13,16 @@ export async function searchKakaoPlace(query, kakaoKey) {
   }))
 }
 
-// ODsay 대중교통 경로 (하차역 → 목적지)
-export async function fetchOdsayTransit(origin, dest, odsayKey) {
+// ODsay 대중교통 경로 (하차역 → 목적지) — 서버리스 프록시를 통해 호출
+export async function fetchOdsayTransit(origin, dest) {
   try {
     const url =
-      `https://api.odsay.com/v1/api/searchPubTransPathT` +
-      `?SX=${origin.x}&SY=${origin.y}` +
-      `&EX=${dest.x}&EY=${dest.y}` +
-      `&apiKey=${encodeURIComponent(odsayKey)}`
+      `/api/transit` +
+      `?sx=${origin.x}&sy=${origin.y}` +
+      `&ex=${dest.x}&ey=${dest.y}`
     const res = await fetch(url)
     const data = await res.json()
-    if (data.result?.path?.length > 0) {
-      const best = data.result.path.reduce((a, b) =>
-        a.info.totalTime <= b.info.totalTime ? a : b
-      )
-      return best.info.totalTime // 분 단위
-    }
-    return null
+    return data.totalTime ?? null
   } catch {
     return null
   }

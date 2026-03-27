@@ -40,7 +40,7 @@ export default function App() {
     setResults(null)
 
     const transitResults = await Promise.all(
-      candidates.map(c => fetchOdsayTransit(c.route.finalCoord, destPlace, odsayKey))
+      candidates.map(c => fetchOdsayTransit(c.route.finalCoord, destPlace))
     )
 
     setLoading(false)
