@@ -39,8 +39,8 @@ export default function App() {
     setResults(null)
     setPureTransitMin(null)
 
-    // 대진대학교 좌표 (포천시 신북면)
-    const DAEJIN_COORD = { x: 127.0638, y: 37.7315 }
+    // 대진대학교 좌표 (포천시 선단동)
+    const DAEJIN_COORD = { x: 127.15612168310325, y: 37.870684661337016 }
 
     // ODsay rate limit 방지: 4개씩 순차 처리 (셔틀 정류장 → 목적지)
     const transitResults = []
