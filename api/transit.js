@@ -14,7 +14,7 @@ export default async function handler(req, res) {
 
   try {
     const params = new URLSearchParams({ SX: sx, SY: sy, EX: ex, EY: ey, apiKey: odsayKey })
-    const url = `https://api.odsay.com/v1/api/searchPubTransPathT?${params}`
+    const url = `https://api.odsay.com/v1/api/searchPubTransPath?${params}`
 
     const response = await fetch(url, {
       headers: { Referer: 'https://dajin-shuttle.vercel.app' },
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ totalTime: best.info.totalTime })
     }
 
-    return res.status(200).json({ totalTime: null })
+    return res.status(200).json({ totalTime: null, _debug: data })
   } catch (e) {
     return res.status(500).json({ error: e.message })
   }
