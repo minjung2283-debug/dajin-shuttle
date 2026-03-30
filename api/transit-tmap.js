@@ -29,6 +29,7 @@ export default async function handler(req, res) {
     })
 
     const data = await response.json()
+    console.log('[TMap raw]', JSON.stringify(data).slice(0, 500))
     const itineraries = data.metaData?.plan?.itineraries ?? data.plan?.itineraries
 
     if (itineraries?.length > 0) {
