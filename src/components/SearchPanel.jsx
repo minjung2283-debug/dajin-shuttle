@@ -8,7 +8,6 @@ export default function SearchPanel({ day, time, onDayChange, onTimeChange, onSe
   return (
     <>
       <Card className="p-4 mb-2.5">
-        <p className="font-mono text-[10px] tracking-[2px] text-slate-400 uppercase mb-3">요일 · 출발 가능 시각</p>
         <div className="grid grid-cols-[auto_1fr] gap-2.5 items-end">
           {/* 요일 선택 */}
           <div className="flex gap-1">
@@ -34,7 +33,6 @@ export default function SearchPanel({ day, time, onDayChange, onTimeChange, onSe
 
           {/* 시각 입력 */}
           <div>
-            <label className="block text-[11px] text-slate-400 mb-1.5">출발 시각</label>
             <input
               type="time"
               value={time}
