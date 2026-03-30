@@ -39,18 +39,20 @@ export default function App() {
     setResults(null)
     setPureTransitMin(null)
 
-    // ODsay rate limit 방지: 4개씩 순차 처리
-    const transitResults = []
-    for (let i = 0; i < perStop.length; i += 4) {
-      const batch = await Promise.all(
-        perStop.slice(i, i + 4).map(c => fetchOdsayTransit(c.stop.coord, destPlace))
-      )
-      transitResults.push(...batch)
-    }
+    // 대진대학교 좌표 (포천시 신북면)
+    const DAEJIN_COORD = { x: 127.0638, y: 37.7315 }
 
-    // 수락산역(대진대 인근 최초 지하철역) 기준 대중교통 시간
-    const nowonIdx = perStop.findIndex(c => c.route.id === 'nowon' && c.stop.name === '수락산역')
-    setPureTransitMin(nowonIdx >= 0 ? transitResults[nowonIdx] : null)
+    // ODsay rate limit 방지: 4개씩 순차 처리 (대진대 → 목적지 호출 포함)
+    const allCoords = [...perStop.map(c => c.stop.coord), DAEJIN_COORD]
+    const allResults = []
+    for (let i = 0; i < allCoords.length; i += 4) {
+      const batch = await Promise.all(
+        allCoords.slice(i, i + 4).map(coord => fetchOdsayTransit(coord, destPlace))
+      )
+      allResults.push(...batch)
+    }
+    const transitResults = allResults.slice(0, perStop.length)
+    setPureTransitMin(allResults[allResults.length - 1])
     setLoading(false)
 
     // Compute totals and keep best stop per route
